@@ -3,7 +3,7 @@ import socket
 import numpy
 import time
 
-HOST = "localhost"
+HOST = "ledscape.local"
 PORT = 9999
 WIDTH = 512
 HEIGHT = 64

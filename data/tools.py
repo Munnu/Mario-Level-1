@@ -105,7 +105,7 @@ class Control(object):
             wt = max(0, min(350, y-100))
 
         if hasattr(self.state,'viewport'):
-            offset = self.state.viewport.x % 512
+            offset = (self.state.viewport.x / 2) % 512
         
         pg.transform.scale(self.screen.subsurface((0,wt,c.SCREEN_WIDTH,200)), (512,64), self.ledsurf)
         self.transmitter.queue(pg.surfarray.array3d(self.ledsurf), offset)

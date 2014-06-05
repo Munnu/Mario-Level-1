@@ -14,7 +14,6 @@ from multiprocessing import Process,Queue
 from data import transmitter
 
 def childrun(queue):
-    print "I'm the child."
     t = transmitter.Transmitter(queue)
     t.start()
 
