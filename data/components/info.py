@@ -219,8 +219,8 @@ class OverheadInfo(object):
         top = []
         top_score = []
 
-        self.create_label(player_one_game, '1 PLAYER GAME', 272, 360)
-        self.create_label(player_two_game, '2 PLAYER GAME', 272, 405)
+        self.create_label(player_one_game, 'PLAY GAME', 272, 380)
+        #self.create_label(player_two_game, '2 PLAYER GAME', 272, 405)
         self.create_label(top, 'TOP - ', 290, 465)
         self.create_label(top_score, '000000', 400, 465)
 
@@ -333,6 +333,9 @@ class OverheadInfo(object):
         self.create_label(self.coin_count_images, coin_string, x, y)
 
 
+    def rectshift(self, rect, delta):
+        return (rect[0]+delta, rect[1], rect[2], rect[3])
+
     def draw(self, surface):
         """Draws overhead info based on state"""
         if self.state == c.MAIN_MENU:
@@ -381,12 +384,21 @@ class OverheadInfo(object):
         for word in self.center_labels:
             for letter in word:
                 surface.blit(letter.image, letter.rect)
+                surface.blit(letter.image, self.rectshift(letter.rect,400))
 
         for word in self.life_total_label:
             surface.blit(word.image, word.rect)
+            surface.blit(word.image, self.rectshift(word.rect,400))
 
         surface.blit(self.mario_image, self.mario_rect)
+        surface.blit(self.mario_image, self.rectshift(self.mario_rect,400))
+
         surface.blit(self.life_times_image, self.life_times_rect)
+        surface.blit(self.life_times_image, self.rectshift(self.life_times_rect,400))
+
+        for info in self.score_images:
+            surface.blit(info.image, (info.rect[0] + 205, 360, 20, 20))
+            surface.blit(info.image, (info.rect[0] + 605, 360, 20, 20))
 
         for character in self.coin_count_images:
             surface.blit(character.image, character.rect)
@@ -424,6 +436,7 @@ class OverheadInfo(object):
         for word in self.game_over_label:
             for letter in word:
                 surface.blit(letter.image, letter.rect)
+                surface.blit(letter.image, self.rectshift(letter.rect,400))
 
         for character in self.coin_count_images:
             surface.blit(character.image, character.rect)
@@ -431,6 +444,10 @@ class OverheadInfo(object):
         for label in self.label_list:
             for letter in label:
                 surface.blit(letter.image, letter.rect)
+
+        for info in self.score_images:
+            surface.blit(info.image, (info.rect[0] + 205, 340, 20, 20))
+            surface.blit(info.image, (info.rect[0] + 605, 340, 20, 20))
 
         surface.blit(self.flashing_coin.image, self.flashing_coin.rect)
 
@@ -450,6 +467,7 @@ class OverheadInfo(object):
         for label in self.label_list:
             for letter in label:
                 surface.blit(letter.image, letter.rect)
+                surface.blit(letter.image, self.rectshift(letter.rect,400))
 
         surface.blit(self.flashing_coin.image, self.flashing_coin.rect)
 
