@@ -1,5 +1,7 @@
 __author__ = 'justinarmstrong'
 
+import pygame as pg
+
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1200
 
@@ -170,7 +172,9 @@ TIME_WARNING = 'time warning'
 SPED_UP_NORMAL = 'sped up normal'
 MARIO_INVINCIBLE = 'mario invincible'
 
-
+JOY_MAP = [ pg.K_DOWN, pg.K_UP, pg.K_LEFT, pg.K_RIGHT, None, \
+    None, pg.K_RETURN, pg.K_RETURN, pg.K_RETURN, \
+    pg.K_s, pg.K_a ]
 
 
 

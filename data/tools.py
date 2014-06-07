@@ -3,7 +3,6 @@ __author__ = 'justinarmstrong'
 import os
 import pygame as pg
 import pygame.surfarray as surfarray
-import transmitter
 import constants as c
 
 keybinding = {
@@ -18,8 +17,9 @@ class Control(object):
     """Control class for entire project. Contains the game loop, and contains
     the event_loop which passes events to States as needed. Logic for flipping
     states is also found here."""
-    def __init__(self, caption, queue):
-        self.screen = pg.display.get_surface()
+    def __init__(self, caption):
+        self.screen = c.SCREEN
+        self.dsurf = pg.display.get_surface()
         self.done = False
         self.clock = pg.time.Clock()
         self.caption = caption
@@ -30,11 +30,7 @@ class Control(object):
         self.state_dict = {}
         self.state_name = None
         self.state = None
-        self.transmitter = transmitter.Transmitter(queue)
         self.ledsurf = pg.transform.scale(self.screen.subsurface((0,0,c.SCREEN_WIDTH,200)), (512,64))
-        #self.ledbuf = pg.PixelArray(self.ledsurf).transpose()
-        #pg.time.set_timer(pg.USEREVENT+1, 100)
-        #self.transmitter.start()
 
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict
@@ -66,10 +62,21 @@ class Control(object):
                 self.toggle_show_fps(event.key)
             elif event.type == pg.KEYUP:
                 self.keys = pg.key.get_pressed()
-            elif event.type == pg.USEREVENT + 1:
-                self.send()
+            elif event.type == pg.JOYBUTTONDOWN:
+                self.keys = self.get_keys_from_joystick()
+            elif event.type == pg.JOYBUTTONUP:
+                self.keys = self.get_keys_from_joystick()
+
             self.state.get_event(event)
 
+    def get_keys_from_joystick(self):
+        keys = list(pg.key.get_pressed())
+        for joy in c.JOYSTICKS:
+            for b in range(joy.get_numbuttons()):
+                if (joy.get_button(b) and b<len(c.JOY_MAP) and c.JOY_MAP[b] != None):
+                    keys[c.JOY_MAP[b]] = True
+
+        return keys
 
     def toggle_show_fps(self, key):
         if key == pg.K_F5:
@@ -87,16 +94,15 @@ class Control(object):
             self.update()
             self.clock.tick(self.fps)
 
+            self.draw_viewport()
             pg.display.update()
-
-            self.send()
 
             if self.show_fps:
                 fps = self.clock.get_fps()
                 with_fps = "{} - {:.2f} FPS".format(self.caption, fps)
                 pg.display.set_caption(with_fps)
 
-    def send(self):
+    def draw_viewport(self):
         wt = 200
         offset = 0
         
@@ -105,10 +111,11 @@ class Control(object):
             wt = max(0, min(350, y-100))
 
         if hasattr(self.state,'viewport'):
-            offset = self.state.viewport.x % 512
+            offset = (self.state.viewport.x / 2) % 512
         
         pg.transform.scale(self.screen.subsurface((0,wt,c.SCREEN_WIDTH,200)), (512,64), self.ledsurf)
-        self.transmitter.queue(pg.surfarray.array3d(self.ledsurf), offset)
+        self.dsurf.blit(self.ledsurf,(offset,0),(0,0,512-offset,64))
+        self.dsurf.blit(self.ledsurf,(0,0),(512-offset,0,offset,64))
         #pg.draw.rect(self.screen, (255,0,0), (0,wt,1200,200),1)
 
 class _State(object):

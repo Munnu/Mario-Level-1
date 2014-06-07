@@ -11,12 +11,13 @@ from .import constants as c
 
 ORIGINAL_CAPTION = c.ORIGINAL_CAPTION
 
-
+os.environ['SDL_VIDEO_WINDOW_POS'] = "5,25"
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 pg.init()
 pg.event.set_allowed([pg.KEYDOWN, pg.KEYUP, pg.QUIT])
 pg.display.set_caption(c.ORIGINAL_CAPTION)
-SCREEN = pg.display.set_mode(c.SCREEN_SIZE)
+DISPLAY = pg.display.set_mode((512,64))
+c.SCREEN = SCREEN = pg.Surface(c.SCREEN_SIZE)
 SCREEN_RECT = SCREEN.get_rect()
 
 
@@ -25,4 +26,11 @@ MUSIC = tools.load_all_music(os.path.join("resources","music"))
 GFX   = tools.load_all_gfx(os.path.join("resources","graphics"))
 SFX   = tools.load_all_sfx(os.path.join("resources","sound"))
 
+pg.joystick.init()
+c.JOYSTICKS = []
+for x in range(pg.joystick.get_count()):
+    j = pg.joystick.Joystick(x)
+    j.init()
+    c.JOYSTICKS.append(j)
 
+print pg.display.Info()
