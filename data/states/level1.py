@@ -352,6 +352,9 @@ class Level1(tools._State):
 
 
     def update(self, surface, keys, current_time):
+	if keys[pg.K_RETURN]:
+		self.mario.start_death_jump(self.game_info)
+
         """Updates Entire level using states.  Called by the control object"""
         self.game_info[c.CURRENT_TIME] = self.current_time = current_time
         self.handle_states(keys)
