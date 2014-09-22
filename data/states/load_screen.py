@@ -33,15 +33,15 @@ class LoadScreen(tools._State):
 
     def update(self, surface, keys, current_time):
         """Updates the loading screen"""
-        if (current_time - self.start_time) < 2400:
+        if (current_time - self.start_time) < 1400:
             surface.fill(c.BLACK)
             self.overhead_info.update(self.game_info)
             self.overhead_info.draw(surface)
 
-        elif (current_time - self.start_time) < 2600:
+        elif (current_time - self.start_time) < 1600:
             surface.fill(c.BLACK)
 
-        elif (current_time - self.start_time) < 2635:
+        elif (current_time - self.start_time) < 1635:
             surface.fill((106, 150, 252))
 
         else:
@@ -68,13 +68,13 @@ class GameOver(LoadScreen):
         self.current_time = current_time
         self.sound_manager.update(self.persist, None)
 
-        if (self.current_time - self.start_time) < 7000:
+        if (self.current_time - self.start_time) < 4000:
             surface.fill(c.BLACK)
             self.overhead_info.update(self.game_info)
             self.overhead_info.draw(surface)
-        elif (self.current_time - self.start_time) < 7200:
+        elif (self.current_time - self.start_time) < 4200:
             surface.fill(c.BLACK)
-        elif (self.current_time - self.start_time) < 7235:
+        elif (self.current_time - self.start_time) < 4235:
             surface.fill((106, 150, 252))
         else:
             self.done = True
@@ -99,7 +99,7 @@ class TimeOut(LoadScreen):
     def update(self, surface, keys, current_time):
         self.current_time = current_time
 
-        if (self.current_time - self.start_time) < 2400:
+        if (self.current_time - self.start_time) < 1400:
             surface.fill(c.BLACK)
             self.overhead_info.update(self.game_info)
             self.overhead_info.draw(surface)
