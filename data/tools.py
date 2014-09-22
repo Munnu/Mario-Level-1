@@ -111,7 +111,7 @@ class Control(object):
             wt = max(0, min(350, y-100))
 
         if hasattr(self.state,'viewport'):
-            offset = (self.state.viewport.x / 2) % 512
+            offset = (188 + self.state.viewport.x / 2) % 512
         
         pg.transform.scale(self.screen.subsurface((0,wt,c.SCREEN_WIDTH,200)), (512,64), self.ledsurf)
         self.dsurf.blit(self.ledsurf,(offset,0),(0,0,512-offset,64))
